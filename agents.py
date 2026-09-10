@@ -13,6 +13,8 @@ AGENTS = [
     ("attention", "Attention & Accuracy", "Precision", "Spot the one exact match.", "◎"),
     ("reaction", "Reaction Speed", "Fast decisions", "Classify the prompt accurately and quickly.", "⚡"),
     ("multitasking", "Multitasking", "Dual tracking", "Answer two rules at once.", "⧉"),
+     ("bubble-agent", "Bubble Agent", "Numerical comparison",
+     "Choose the correct expression by clicking a bubble.", "◯"),
 ]
 META = {x[0]: {"slug":x[0], "name":x[1], "skill":x[2], "description":x[3], "icon":x[4], "variants": "Unlimited"} for x in AGENTS}
 

@@ -4,6 +4,8 @@ import secrets, time
 from flask import Flask, jsonify, render_template, request, abort
 from agents import AGENTS, META, generate
 from maze import make_maze, reachable, rotate
+from bubble_agent import BUBBLE_META, generate as generate_bubble 
+
 
 SESSIONS={}; DURATION=900
 def now(): return datetime.now(timezone.utc)
@@ -26,11 +28,45 @@ def create_app():
   @app.get("/api/v1/health")
   def health(): return jsonify(status="ok", service="accenture-gamelab")
   @app.get("/api/v1/agents")
-  def agents(): return jsonify(agents=list(META.values()))
+  def agents(): 
+    all_agents = list(META.values())
+
+    # Add Bubble Agent 
+    all_agents.append(BUBBLE_META)
+
+    return jsonify(
+        agents=all_agents
+    )
   @app.get("/api/v1/agents/<slug>")
   def agent(slug):
-    if slug not in META: abort(404)
-    return jsonify(META[slug] | {"difficulties":["easy","medium","hard"],"duration_seconds":DURATION})
+
+    if slug == "bubble-agent":
+
+        return jsonify(
+            BUBBLE_META | {
+                "difficulties": [
+                    "easy",
+                    "medium",
+                    "hard"
+                ],
+                "duration_seconds": DURATION,
+                "minimum_questions": 50
+            }
+        )
+
+    if slug not in META:
+        abort(404)
+
+    return jsonify(
+        META[slug] | {
+            "difficulties": [
+                "easy",
+                "medium",
+                "hard"
+            ],
+            "duration_seconds": DURATION
+        }
+    )
   @app.post("/api/v1/sessions")
   def create_session():
     data=request.get_json(silent=True) or {}; slug=data.get("agent"); difficulty=data.get("difficulty","medium")
@@ -43,10 +79,59 @@ def create_app():
     if s["status"]=="CREATED": s["status"]="ACTIVE"; s["started_at"]=now(); s["expires_at"]=now()+timedelta(seconds=DURATION)
     return jsonify(result(s))
   def new_question(s):
-    if s["agent"]=="pathfinder":
-      puzzle=make_maze({"easy":3,"medium":4,"hard":5}[s["difficulty"]]); s["question"]={"question_id":"maze_"+secrets.token_hex(5),"type":"maze","prompt":"Rotate tiles until a continuous route connects Start to Goal.","payload":{k:v for k,v in puzzle.items() if k!="solution"},"answer":puzzle["solution"]}
-    else: s["question"]=generate(s["agent"],s["difficulty"])
-    s["presented"]=time.monotonic(); return public_question(s["question"])
+
+    if s["agent"] == "pathfinder":
+
+      puzzle = make_maze(
+        s["difficulty"]
+    )
+
+      s["question"] = {
+
+        "question_id":
+            "launch_"
+            + secrets.token_hex(5),
+
+        "type":
+            "launch",
+
+        "agent":
+            "pathfinder",
+
+        "prompt":
+            "Launch to Location",
+
+        "payload": {
+            k: v
+            for k, v in puzzle.items()
+            if k != "solution"
+        },
+
+        "answer":
+            puzzle["solution"],
+    }
+
+
+    elif s["agent"] == "bubble-agent":
+
+        s["question"] = generate_bubble(
+            s["difficulty"]
+        )
+
+
+    else:
+
+        s["question"] = generate(
+            s["agent"],
+            s["difficulty"]
+        )
+
+
+    s["presented"] = time.monotonic()
+
+    return public_question(
+        s["question"]
+    )
   @app.get("/api/v1/sessions/<ident>/question")
   def question(ident):
     s=session_or_404(ident)
@@ -58,11 +143,31 @@ def create_app():
     if s["status"]!="ACTIVE": abort(409, "Session is no longer active")
     q=s.get("question")
     if not q or data.get("question_id") != q["question_id"]: abort(400, "Current question_id required")
-    if s["agent"]=="pathfinder":
-      grid=data.get("action",{}).get("grid"); payload=q["payload"]
-      valid=isinstance(grid,list) and len(grid)==payload["size"] and all(isinstance(row,list) and len(row)==payload["size"] and all(isinstance(x,int) and 0<=x<=15 for x in row) for row in grid)
-      correct=valid and reachable(grid,payload["start"],payload["goal"])
-    else: correct=data.get("answer")==q["answer"]
+    if s["agent"] == "pathfinder":
+
+      path = (
+        data
+        .get("action", {})
+        .get("path")
+    )
+
+
+      payload = q["payload"]
+
+
+      correct = reachable(
+        path,
+        q["answer"],
+        payload
+    )
+
+
+    else:
+
+      correct = (
+        data.get("answer")
+        == q["answer"]
+    )
     s["attempted"]+=1; s["correct"]+=int(correct); s["score"]+=int(correct); s["response_total"]+=time.monotonic()-s["presented"]; s["question"]=None
     return jsonify(correct=correct, score_delta=int(correct), stats=result(s), next_question=new_question(s))
   @app.post("/api/v1/sessions/<ident>/finish")
