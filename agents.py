@@ -4,15 +4,14 @@ import random
 import uuid
 
 AGENTS = [
-    ("pathfinder", "Path Finder", "Spatial reasoning", "Rotate path tiles to connect Start to Goal.", "🧭"),
-    ("sequential", "Sequential", "Progressions", "Find the next item in a sequence.", "↗"),
-    ("reasoning", "Reasoning", "Deduction", "Solve compact decision challenges.", "◇"),
     ("memory", "Memory", "Working memory", "Study a sequence, then recall it.", "◉"),
     ("pattern", "Pattern Recognition", "Transformations", "Identify the rule behind the pattern.", "✦"),
     ("logical", "Logical Reasoning", "Rules & conditions", "Infer a valid conclusion from rules.", "⌘"),
     ("attention", "Attention & Accuracy", "Precision", "Spot the one exact match.", "◎"),
     ("reaction", "Reaction Speed", "Fast decisions", "Classify the prompt accurately and quickly.", "⚡"),
     ("multitasking", "Multitasking", "Dual tracking", "Answer two rules at once.", "⧉"),
+     ("bubble-agent", "Bubble Agent", "Numerical comparison",
+     "Choose the correct expression by clicking a bubble.", "◯"),
 ]
 META = {x[0]: {"slug":x[0], "name":x[1], "skill":x[2], "description":x[3], "icon":x[4], "variants": "Unlimited"} for x in AGENTS}
 

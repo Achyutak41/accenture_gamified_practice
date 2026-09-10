@@ -5,4 +5,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
 ENV PORT=8000
 EXPOSE 8000
-CMD ["sh", "-c", "gunicorn --workers 2 --bind 0.0.0.0:${PORT} app:app"]
+CMD ["sh", "-c", "gunicorn --workers 1 --bind 0.0.0.0:${PORT} app:app"]

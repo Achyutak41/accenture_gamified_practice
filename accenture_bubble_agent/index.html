@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Accenture Gamified Practice — Bubble Agent</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">ACCENTURE GAMIFIED PRACTICE</div>
+        <h1>Bubble Agent</h1>
+      </div>
+      <div class="difficulty" id="difficultyBadge">MEDIUM</div>
+    </header>
+
+    <section class="hud">
+      <div><span>QUESTION</span><strong id="questionNumber">1</strong></div>
+      <div><span>SCORE</span><strong id="score">0</strong></div>
+      <div><span>TIME</span><strong id="timer">15:00</strong></div>
+    </section>
+
+    <section class="card">
+      <p class="instruction" id="instruction">Select the smallest value.</p>
+      <p class="hint" id="hint">Choose one of the bubbles below.</p>
+      <div id="bubbles" class="bubbles" aria-live="polite"></div>
+      <div id="feedback" class="feedback" role="status"></div>
+      <button id="nextButton" class="next-button" hidden>Next Question</button>
+    </section>
+
+    <section class="progress">
+      <div class="progress-label">
+        <span>15-minute practice</span>
+        <span id="progressText">0 answered</span>
+      </div>
+      <div class="progress-track"><div id="progressBar" class="progress-bar"></div></div>
+    </section>
+  </main>
+
+  <script src="bubble-agent.js"></script>
+</body>
+</html>
