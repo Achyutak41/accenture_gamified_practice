@@ -42,53 +42,55 @@
             }
         );
 
+// =========================================================
+// Load agents
+// =========================================================
 
-    // =========================================================
-    // Load agents
-    // =========================================================
+async function load() {
 
-    async function load() {
-
-        let {
-            agents
-        } = await api(
-            '/agents'
-        );
+    let {
+        agents
+    } = await api('/agents');
 
 
-        $('#cards').innerHTML =
-            agents
-                .map(
-                    a => `
+    $('#cards').innerHTML =
+        agents
+            .map(
+                a => `
 
-                        <article class="card">
+                    <article
+                        class="card ${
+                            a.slug === 'bubble-agent'
+                                ? 'bubble-agent-card'
+                                : ''
+                        }"
+                    >
 
-                            <div class="icon">
-                                ${a.icon}
-                            </div>
+                        <div class="icon">
+                            ${a.icon}
+                        </div>
 
-                            <h3>
-                                ${a.name}
-                            </h3>
+                        <h3>
+                            ${a.name}
+                        </h3>
 
-                            <p>
-                                ${a.description}
-                            </p>
+                        <p>
+                            ${a.description}
+                        </p>
 
-                            <button
-                                aria-label="Start ${a.name}"
-                                onclick="start('${a.slug}')"
-                            >
-                                →
-                            </button>
+                        <button
+                            aria-label="Start ${a.name}"
+                            onclick="start('${a.slug}')"
+                        >
+                            →
+                        </button>
 
-                        </article>
+                    </article>
 
-                    `
-                )
-                .join('');
-    }
-
+                `
+            )
+            .join('');
+}
 
     // =========================================================
     // Start session
@@ -246,22 +248,6 @@
         const gameActions =
             $('#gameActions');
 
-
-        // =====================================================
-        // PATH FINDER
-        // =====================================================
-
-        if (q.type === 'launch') {
-
-            pathFinderPath = [];
-
-            // Hide normal Submit answer buttons.
-            gameActions.classList.add('hidden');
-
-            renderPathFinder();
-
-            return;
-        }
 
 
         // =====================================================
@@ -476,234 +462,6 @@
         );
     }
 
-
-    // =========================================================
-    // PATH FINDER
-    // =========================================================
-
-    function renderPathFinder() {
-
-        const payload =
-            question.payload;
-
-
-        const rows =
-            payload.rows;
-
-
-        const cols =
-            payload.cols;
-
-
-        const grid =
-            payload.grid;
-
-
-        const startRow =
-            payload.start.row;
-
-
-        const goalRow =
-            payload.goal.row;
-
-
-        const questionElement =
-            $('#question');
-
-
-        questionElement.innerHTML = `
-
-            <div class="pathfinder-title">
-
-                <span class="pathfinder-objective">
-                    OBJECTIVE
-                </span>
-
-                <h3>
-                    Launch to Location
-                </h3>
-
-            </div>
-
-
-            <div class="pathfinder-board-wrapper">
-
-                <div
-                    class="pathfinder-start"
-                    style="grid-row:${startRow + 1};"
-                >
-                    🚀
-                </div>
-
-
-                <div
-                    class="pathfinder-board"
-                    style="
-                        grid-template-columns:
-                            repeat(${cols}, 1fr);
-
-                        grid-template-rows:
-                            repeat(${rows}, 1fr);
-                    "
-                >
-
-                    ${
-                        grid
-                            .map(
-                                (row, y) =>
-
-                                    row
-                                        .map(
-                                            (
-                                                direction,
-                                                x
-                                            ) => {
-
-                                                const index =
-                                                    pathFinderPath.findIndex(
-                                                        cell =>
-                                                            cell.row === y &&
-                                                            cell.col === x
-                                                    );
-
-
-                                                const isSelected =
-                                                    index !== -1;
-
-
-                                                const arrow =
-                                                    direction
-                                                        ? arrowFor(
-                                                            direction
-                                                        )
-                                                        : '';
-
-
-                                                return `
-
-                                                    <button
-                                                        type="button"
-
-                                                        class="
-                                                            pathfinder-cell
-                                                            ${direction ? 'has-arrow' : 'empty'}
-                                                            ${isSelected ? 'path-selected' : ''}
-                                                        "
-
-                                                        data-row="${y}"
-
-                                                        data-col="${x}"
-
-                                                        onclick="
-                                                            selectPathCell(
-                                                                ${y},
-                                                                ${x}
-                                                            )
-                                                        "
-                                                    >
-
-                                                        <span class="pathfinder-arrow">
-                                                            ${arrow}
-                                                        </span>
-
-
-                                                        ${
-                                                            isSelected
-                                                                ? `
-                                                                    <span class="path-step">
-                                                                        ${index + 1}
-                                                                    </span>
-                                                                `
-                                                                : ''
-                                                        }
-
-                                                    </button>
-
-                                                `;
-                                            }
-                                        )
-                                        .join('')
-                            )
-                            .join('')
-                    }
-
-                </div>
-
-
-                <div
-                    class="pathfinder-goal"
-                    style="grid-row:${goalRow + 1};"
-                >
-                    📍
-                </div>
-
-            </div>
-
-
-            <div class="pathfinder-help">
-
-                Follow the arrows from
-                🚀 Start to 📍 Goal.
-                Click each cell as you move.
-
-            </div>
-
-
-            <div class="pathfinder-actions">
-
-                <button
-                    type="button"
-                    class="pathfinder-reset"
-                    onclick="resetPathFinder()"
-                >
-                    Reset
-                </button>
-
-
-                <button
-                    type="button"
-                    class="pathfinder-submit"
-                    onclick="submitPathFinder()"
-                >
-                    Launch
-                </button>
-
-            </div>
-
-        `;
-    }
-
-
-    // =========================================================
-    // Arrow character
-    // =========================================================
-
-    function arrowFor(
-        direction
-    ) {
-
-        const arrows = {
-
-            up:
-                '↑',
-
-            right:
-                '→',
-
-            down:
-                '↓',
-
-            left:
-                '←'
-
-        };
-
-
-        return (
-            arrows[direction]
-            || ''
-        );
-    }
 
 
     // =========================================================
