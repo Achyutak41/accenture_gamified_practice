@@ -13,6 +13,12 @@ flask --app app run --debug
 
 Then open `http://127.0.0.1:5000`.
 
+## Deploy and share
+
+The project is ready for [Render](https://render.com). Push this folder to GitHub, sign in to Render with GitHub, choose **New > Blueprint**, select the repository, and deploy. Render reads `render.yaml` and gives you a public URL to share with friends.
+
+For a different host, use the included `Procfile` or `Dockerfile`. The production health check is available at `/api/v1/health`.
+
 ## Test
 
 ```powershell
