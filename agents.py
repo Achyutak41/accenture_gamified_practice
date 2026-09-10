@@ -4,9 +4,6 @@ import random
 import uuid
 
 AGENTS = [
-    ("pathfinder", "Path Finder", "Spatial reasoning", "Rotate path tiles to connect Start to Goal.", "🧭"),
-    ("sequential", "Sequential", "Progressions", "Find the next item in a sequence.", "↗"),
-    ("reasoning", "Reasoning", "Deduction", "Solve compact decision challenges.", "◇"),
     ("memory", "Memory", "Working memory", "Study a sequence, then recall it.", "◉"),
     ("pattern", "Pattern Recognition", "Transformations", "Identify the rule behind the pattern.", "✦"),
     ("logical", "Logical Reasoning", "Rules & conditions", "Infer a valid conclusion from rules.", "⌘"),

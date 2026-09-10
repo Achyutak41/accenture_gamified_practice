@@ -1,7 +1,411 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>GameLab | Assessment Practice</title><link rel="stylesheet" href="/static/style.css"></head><body>
-<main><nav><a class="brand" href="#">ACCENTURE <span>GAME</span>LAB</a><div class="navnote">Practice smarter. Play sharper.</div></nav>
-<section id="landing" class="hero"><div><p class="eyebrow">FREE ASSESSMENT PRACTICE PLATFORM</p><h1>Train your thinking.<br><i>Level up your edge.</i></h1><p class="lede">Nine focused game modes designed to build confidence for gamified assessments. Every session is a fresh 15-minute challenge.</p><button class="primary" onclick="document.querySelector('#games').scrollIntoView({behavior:'smooth'})">Explore game modes <b>→</b></button></div><div class="hero-orbit"><div class="orb">15<small>MINUTES</small></div><span class="float f1">◈</span><span class="float f2">✦</span><span class="float f3">⌘</span></div></section>
-<section id="games"><div class="section-head"><div><p class="eyebrow">CHOOSE YOUR CHALLENGE</p><h2>What do you want to <i>master?</i></h2></div><p>Each game targets a skill that matters in fast-paced assessment environments.</p></div><div id="cards" class="cards"></div></section>
-<section id="play" class="hidden"><button class="back" onclick="goHome()">← All game modes</button><div class="game-top"><div><p id="gameSkill" class="eyebrow"></p><h2 id="gameName"></h2></div><div class="timer"><span>SESSION TIME</span><strong id="clock">15:00</strong></div><div class="scoreline"><span>SCORE</span><strong id="score">0</strong><span id="accuracy">0% accuracy</span></div></div><div class="progress"><i id="progress"></i></div><div id="question" class="question-card"></div><div id="feedback" aria-live="polite"></div><div class="game-actions"><button class="secondary" onclick="finish()">Finish session</button><button id="submit" class="primary" onclick="submitAnswer()">Submit answer <b>→</b></button></div></section>
-<section id="results" class="hidden results"><p class="eyebrow">SESSION COMPLETE</p><h2>Nice work. Here is your <i>snapshot.</i></h2><div id="resultGrid" class="result-grid"></div><button class="primary" onclick="goHome()">Choose another challenge</button></section>
-</main><footer>© 2026 GAME LAB · Built for focused practice</footer><script src="/static/app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1"
+    >
+
+    <title>
+        GameLab | Assessment Practice
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="/static/style.css"
+    >
+
+</head>
+
+
+<body>
+
+<main>
+
+
+    <!-- =================================================
+         NAVIGATION
+         ================================================= -->
+
+    <nav>
+
+        <a
+            class="brand"
+            href="#"
+        >
+            ACCENTURE
+            <span>GAME</span>LAB
+        </a>
+
+
+        <div class="navnote">
+            Practice smarter. Play sharper.
+        </div>
+
+    </nav>
+
+
+    <!-- =================================================
+         LANDING PAGE
+         ================================================= -->
+
+    <section
+        id="landing"
+        class="hero"
+    >
+
+        <div>
+
+            <p class="eyebrow">
+                FREE ASSESSMENT PRACTICE PLATFORM
+            </p>
+
+
+            <h1>
+                Train your thinking.
+                <br>
+                <i>Level up your edge.</i>
+            </h1>
+
+
+            <p class="lede">
+                Ten focused game modes designed to build
+                confidence for gamified assessments.
+                Every session is a fresh 15-minute challenge.
+            </p>
+
+
+            <button
+                class="primary"
+                onclick="
+                    document
+                        .querySelector('#games')
+                        .scrollIntoView({
+                            behavior: 'smooth'
+                        })
+                "
+            >
+                Explore game modes
+                <b>→</b>
+            </button>
+
+        </div>
+
+
+        <div class="hero-orbit">
+
+            <div class="orb">
+
+                15
+
+                <small>
+                    MINUTES
+                </small>
+
+            </div>
+
+
+            <span class="float f1">
+                ◈
+            </span>
+
+
+            <span class="float f2">
+                ✦
+            </span>
+
+
+            <span class="float f3">
+                ⌘
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- =================================================
+         GAME MODES
+         ================================================= -->
+
+    <section id="games">
+
+        <div class="section-head">
+
+            <div>
+
+                <p class="eyebrow">
+                    CHOOSE YOUR CHALLENGE
+                </p>
+
+
+                <h2>
+                    What do you want to
+                    <i>master?</i>
+                </h2>
+
+            </div>
+
+
+            <p>
+                Each game targets a skill that matters
+                in fast-paced assessment environments.
+            </p>
+
+        </div>
+
+
+        <!--
+            JavaScript dynamically inserts all agents here.
+
+            Existing agents:
+            1. Path Finder
+            2. Sequential
+            3. Reasoning
+            4. Memory
+            5. Pattern
+            6. Logical
+            7. Attention
+            8. Reaction
+            9. Multitasking
+
+            Plus:
+            10. Bubble Agent
+        -->
+
+        <div
+            id="cards"
+            class="cards"
+        ></div>
+
+    </section>
+
+
+    <!-- =================================================
+         GAME PLAY SCREEN
+         ================================================= -->
+
+    <section
+        id="play"
+        class="hidden"
+    >
+
+
+        <!-- Back button -->
+
+        <button
+            class="back"
+            onclick="goHome()"
+        >
+            ← All game modes
+        </button>
+
+
+        <!-- =================================================
+             GAME HEADER
+             ================================================= -->
+
+        <div class="game-top">
+
+
+            <!-- Game name -->
+
+            <div>
+
+                <p
+                    id="gameSkill"
+                    class="eyebrow"
+                ></p>
+
+
+                <h2
+                    id="gameName"
+                ></h2>
+
+            </div>
+
+
+            <!-- Timer -->
+
+            <div class="timer">
+
+                <span>
+                    SESSION TIME
+                </span>
+
+
+                <strong id="clock">
+                    15:00
+                </strong>
+
+            </div>
+
+
+            <!-- Score -->
+
+            <div class="scoreline">
+
+                <span>
+                    SCORE
+                </span>
+
+
+                <strong id="score">
+                    0
+                </strong>
+
+
+                <span id="accuracy">
+                    0% accuracy
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             SESSION PROGRESS
+             ================================================= -->
+
+        <div class="progress">
+
+            <i id="progress"></i>
+
+        </div>
+
+
+        <!-- =================================================
+             QUESTION
+             =================================================
+
+             Normal games:
+                 Question + options
+
+             Bubble Agent:
+                 Bubble choices
+
+             Path Finder:
+                 Launch-to-Location arrow board
+        -->
+
+        <div
+            id="question"
+            class="question-card"
+        ></div>
+
+
+        <!-- =================================================
+             FEEDBACK
+             ================================================= -->
+
+        <div
+            id="feedback"
+            aria-live="polite"
+        ></div>
+
+
+        <!-- =================================================
+             NORMAL GAME ACTIONS
+             =================================================
+
+             Path Finder creates its own buttons inside
+             #question, so the normal Submit button is
+             hidden while Path Finder is active.
+        -->
+
+        <div
+            id="gameActions"
+            class="game-actions"
+        >
+
+            <button
+                class="secondary"
+                onclick="finish()"
+            >
+                Finish session
+            </button>
+
+
+            <button
+                id="submit"
+                class="primary"
+                onclick="submitAnswer()"
+            >
+                Submit answer
+                <b>→</b>
+            </button>
+
+        </div>
+
+
+    </section>
+
+
+    <!-- =================================================
+         RESULTS
+         ================================================= -->
+
+    <section
+        id="results"
+        class="hidden results"
+    >
+
+        <p class="eyebrow">
+            SESSION COMPLETE
+        </p>
+
+
+        <h2>
+            Nice work.
+            Here is your
+            <i>snapshot.</i>
+        </h2>
+
+
+        <div
+            id="resultGrid"
+            class="result-grid"
+        ></div>
+
+
+        <button
+            class="primary"
+            onclick="goHome()"
+        >
+            Choose another challenge
+        </button>
+
+    </section>
+
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+     ===================================================== -->
+
+<footer>
+
+    © 2026 GAME LAB · Built for focused practice
+
+</footer>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+     ===================================================== -->
+
+<script
+    src="/static/app.js"
+></script>
+
+
+</body>
+
+</html>
