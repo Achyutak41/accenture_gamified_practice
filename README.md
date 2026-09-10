@@ -11,8 +11,10 @@ pip install -r requirements.txt
 flask --app app run --debug
 ```
 
-## Deployed In Render 
-Check out here  `https://accenture-gamelab.onrender.com/`.
+
+## Deployed In Render
+
+Check out here: [Accenture GameLab](https://accenture-gamelab.onrender.com/)
 
 
 ## Test
